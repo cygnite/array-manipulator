@@ -1,0 +1,21 @@
+{
+    "name": "cygnite/array-manipulator",
+    "license": "MIT",
+    "keywords": ["Cygnite", "Array Accessor", "Array Manipulation", "Array Reading As Path"],
+    "authors": [
+        {
+            "name": "Sanjoy Dey",
+            "email": "dey.sanjoy0@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Cygnite\\Common\\ArrayManipulator": ""
+        }
+    },
+    "target-dir": "Cygnite\\Common\\ArrayManipulator",
+    "minimum-stability": "dev"
+}
