@@ -2,6 +2,7 @@
     "name": "cygnite/array-manipulator",
     "license": "MIT",
     "keywords": ["Cygnite", "Array Accessor", "Array Manipulation", "Array Reading As Path"],
+    "description" : ["Array Element Reader As String Path"],
     "authors": [
         {
             "name": "Sanjoy Dey",
