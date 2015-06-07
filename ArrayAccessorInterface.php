@@ -3,7 +3,13 @@ namespace Cygnite\Common\ArrayManipulator;
 
 interface ArrayAccessorInterface
 {
-     /**
+    /**
+     * @param callable $callback
+     * @return mixed
+     */
+    public static function make(\Closure $callback);
+
+    /**
      * @param array $array
      * @return $this
      */
@@ -27,14 +33,23 @@ interface ArrayAccessorInterface
 
     /**
      * We will convert array to json objects
+     *
      * @return string
      */
-    public function asJson();
+    public function arrayAsJson();
 
     /**
      * @param string $key
      * @param string $default
      * @return string
      */
-    public function getValue($key, $default = '');
+    public function toString($key, $default = '');
+
+
+    /**
+     * @param        $key
+     * @param string $default
+     * @return mixed
+     */
+    public function toInt($key, $default = '');
 }

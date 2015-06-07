@@ -12,6 +12,15 @@ class ArrayAccessor implements ArrayAccessorInterface
     protected $defaultIdentifier = '.';
 
     /**
+     * @param callable $callback
+     * @return mixed
+     */
+    public static function make(\Closure $callback)
+    {
+        return $callback(new Static());
+    }
+
+    /**
      * @param array $array
      * @return $this
      */
@@ -21,6 +30,7 @@ class ArrayAccessor implements ArrayAccessorInterface
 
         return $this;
     }
+
     /**
      * @param string $string
      * @return array
@@ -30,10 +40,12 @@ class ArrayAccessor implements ArrayAccessorInterface
         $string = str_replace($this->identifierArray, $this->replaceWith, $string);
         $parts = explode($this->defaultIdentifier, $string);
 
-        return array_map(function ($part)
-        {
-            return str_replace($this->replaceWith, $this->defaultIdentifier, $part);
-        }, $parts);
+        return array_map(
+            function ($part) {
+                return str_replace($this->replaceWith, $this->defaultIdentifier, $part);
+            },
+            $parts
+        );
     }
 
     /**
@@ -69,7 +81,7 @@ class ArrayAccessor implements ArrayAccessorInterface
         /*
          | Loop all array index to find the array value
          */
-        foreach($chunks as $index) {
+        foreach ($chunks as $index) {
 
             if (!isset($array[$index])) {
                 return null;
@@ -93,67 +105,56 @@ class ArrayAccessor implements ArrayAccessorInterface
 
     /**
      * We will convert array to json objects
+     *
      * @return string
      */
-    public function asJson()
+    public function arrayAsJson()
     {
         return json_encode($this->getArray());
     }
 
     /**
-     * We will check if $key is string or integer
-     * return value accordingly
+     * Return value as string
      *
      * @param        $key
      * @param string $default
-     * @return int|string
+     * @return string
      */
-    public function getValue($key, $default = '')
+    public function toString($key, $default = '')
     {
         $value = $this->manipulate($key);
-
-        switch ($key) {
-            case is_string($key) :
-                return $this->getStringValue($value, $default);
-                break;
-            case is_int($key) :
-                return $this->getNumericValue($value, $default);
-                break;
-        }
+        return $this->convertAs('strval', $value, $default);
     }
 
     /**
-     * Get string array index value
+     * Return value as string
      *
+     * @param        $key
+     * @param string $default
+     * @return int
+     */
+    public function toInt($key, $default = '')
+    {
+        $value = $this->manipulate($key);
+
+        return $this->convertAs('intval', $value, $default);
+    }
+
+    /**
+     * @param $func
      * @param $value
      * @param $default
-     * @return string
+     * @return mixed
      */
-    protected function getStringValue($value, $default)
+    private function convertAs($func, $value, $default)
     {
         /*
          | If we don't find array index we will return default value
          */
-        if (is_null($value)) {
-            return strval($default);
+        if ($func($value)) {
+            return $func($default);
         }
 
-        return strval($value);
-    }
-
-    /**
-     * Get numeric array index value
-     *
-     * @param $value
-     * @param $default
-     * @return int
-     */
-    protected function getNumericValue($value, $default)
-    {
-        if (is_null($value)) {
-            return intval($default);
-        }
-
-        return intval($value);
+        return $func($value);
     }
 }
