@@ -151,7 +151,7 @@ class ArrayAccessor implements ArrayAccessorInterface
         /*
          | If we don't find array index we will return default value
          */
-        if ($func($value)) {
+        if (is_null($value)) {
             return $func($default);
         }
 
